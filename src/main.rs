@@ -8,8 +8,8 @@ use mover::Mover;
 use notan::{notan_main, AppState, prelude::{Graphics, App, WindowConfig, Color, RenderTexture, TextureFilter, Plugins, KeyCode}, draw::{DrawConfig, CreateDraw, DrawImages}, egui::{EguiConfig, Window, EguiPluginSugar, SidePanel, panel::Side, Slider, ComboBox}};
 use pattern_loader::load_selected_pattern;
 
-pub const TRAIL_TEX_WIDTH: i32 = 1920 * 8;
-pub const TRAIL_TEX_HEIGHT: i32 = 1080 * 8;
+pub const TRAIL_TEX_WIDTH: i32 = 1920 * 6;
+pub const TRAIL_TEX_HEIGHT: i32 = 1080 * 6;
 
 #[derive(AppState)]
 struct State {
@@ -160,7 +160,7 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
             ui.add(slider);
             
             if ui.checkbox(&mut state.show_trail, "Rodyti trajektoriją").clicked() {
-                state.trail_texture = gfx.create_render_texture(app.window().width(), app.window().height()).build().unwrap();
+                state.trail_texture = gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).build().unwrap();
             }
             ui.checkbox(&mut state.show_bodies, "Rodyti kūnus");
 

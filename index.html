@@ -1,8 +1,10 @@
-<html><head>
+<html>
+    <head>
         <title>Gravitacine trauka</title>
-        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="viewport"
+              content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <style>
             html, body {
@@ -23,37 +25,8 @@
                 justify-content: center;
             }
         </style>
-    
-<link rel="preload" href="/fizikosproj-f5eef0dfd3168417_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
-<link rel="modulepreload" href="/fizikosproj-f5eef0dfd3168417.js"></head>
+    </head>
     <body>
         <canvas id="notan_canvas"></canvas>
-    
-<script type="module">import init from '/fizikosproj-f5eef0dfd3168417.js';init('/fizikosproj-f5eef0dfd3168417_bg.wasm');</script><script>(function () {
-    var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    var url = protocol + '//' + window.location.host + '/_trunk/ws';
-    var poll_interval = 5000;
-    var reload_upon_connect = () => {
-        window.setTimeout(
-            () => {
-                // when we successfully reconnect, we'll force a
-                // reload (since we presumably lost connection to
-                // trunk due to it being killed, so it will have
-                // rebuilt on restart)
-                var ws = new WebSocket(url);
-                ws.onopen = () => window.location.reload();
-                ws.onclose = reload_upon_connect;
-            },
-            poll_interval);
-    };
-
-    var ws = new WebSocket(url);
-    ws.onmessage = (ev) => {
-        const msg = JSON.parse(ev.data);
-        if (msg.reload) {
-            window.location.reload();
-        }
-    };
-    ws.onclose = reload_upon_connect;
-})()
-</script></body></html>
+    </body>
+</html>
