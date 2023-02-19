@@ -13,7 +13,8 @@ pub struct Mover {
     pub m: f32,
     pub r: f32,
     pub trail_color: Color,
-    pub apply_forces: bool
+    pub apply_forces: bool,
+    pub selected: bool
 }
 
 impl Mover {
@@ -26,17 +27,19 @@ impl Mover {
             m,
             r: m.sqrt() * 10.,
             trail_color: Color::from_rgb(0.5 + random::<f32>() / 2., 0.5 + random::<f32>() / 2., 0.5 + random::<f32>() / 2.),
-            apply_forces: true
+            apply_forces: true,
+            selected: false
         }
     }
 
     pub fn update(&mut self, _app: &mut App) {
-        if self.apply_forces {}
-        self.vel.add_assign(self.acc);
-        self.pos.add_assign(self.vel);
+        if self.apply_forces {
+            self.vel.add_assign(self.acc);
+            self.pos.add_assign(self.vel);
 
-        vec_math::limit(&mut self.vel, 10.);
-        self.acc = Vec2::ZERO;
+            vec_math::limit(&mut self.vel, 10.);
+            self.acc = Vec2::ZERO;
+        }
     }
 
     pub fn save_delta_pos(&mut self) {
@@ -48,7 +51,11 @@ impl Mover {
     }
 
     pub fn render(&self, draw: &mut Draw) {
-        draw.ellipse((self.pos.x, self.pos.y), (self.r, self.r));
+        if !self.selected {
+            draw.ellipse((self.pos.x, self.pos.y), (self.r, self.r));
+        } else {
+            draw.ellipse((self.pos.x, self.pos.y), (self.r, self.r)).color(Color::RED);
+        }
     }
 
     pub fn apply_force(&mut self, force: &Vec2) {
