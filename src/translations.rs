@@ -19,6 +19,7 @@ impl Translations {
         translations.insert("ltrestart".to_string(), "Paleisti iš naujo".to_string());
         translations.insert("ltwasd".to_string(), "Naudokite W, A, S ir D klavišus judėjimui".to_string());
         translations.insert("ltqe".to_string(), "Naudokite Q ir E klavišus pritraukti ir atitraukti vaizdą".to_string());
+        translations.insert("ltcredits".to_string(), "Darba atiliko Mantas Armalys".to_string());
 
         translations.insert("ensettings".to_string(), "Settings".to_string());
         translations.insert("enchooselang".to_string(), "Choose language: ".to_string());
@@ -31,6 +32,8 @@ impl Translations {
         translations.insert("enrestart".to_string(), "Restart".to_string());
         translations.insert("enwasd".to_string(), "Use the W, A, S and D keys to move".to_string());
         translations.insert("enqe".to_string(), "Use the Q and E keys to zoom".to_string());
+        translations.insert("encredits".to_string(), "Made by mantasarm".to_string());
+
 
         Self {
             translations

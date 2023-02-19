@@ -62,12 +62,12 @@ impl Mover {
         self
     }
 
-    pub fn attract(&self, mover: &mut Mover, G: f32) {
+    pub fn attract(&self, mover: &mut Mover, g_constant: f32) {
         if mover.apply_forces {
             let mut force = self.pos.clone() - mover.pos.clone();
             let distance_sq = vec_math::mag_sq(&force).clamp(25., 2500.);
 
-            let strength = G * (self.m * mover.m) / distance_sq;
+            let strength = g_constant * (self.m * mover.m) / distance_sq;
 
             vec_math::set_mag(&mut force, strength);
             mover.apply_force(&force);

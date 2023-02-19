@@ -6,7 +6,7 @@ pub mod translations;
 
 use camera::Camera2D;
 use mover::Mover;
-use notan::{notan_main, AppState, prelude::{Graphics, App, WindowConfig, Color, RenderTexture, TextureFilter, Plugins, KeyCode}, draw::{DrawConfig, CreateDraw, DrawImages}, egui::{EguiConfig, Window, EguiPluginSugar, SidePanel, panel::Side, Slider, ComboBox}};
+use notan::{notan_main, AppState, prelude::{Graphics, App, WindowConfig, Color, RenderTexture, TextureFilter, Plugins, KeyCode}, draw::{DrawConfig, CreateDraw, DrawImages}, egui::{EguiConfig, EguiPluginSugar, SidePanel, panel::Side, Slider, ComboBox, Layout, Align}};
 use pattern_loader::load_selected_pattern;
 use translations::Translations;
 
@@ -20,7 +20,7 @@ struct State {
     sim_speed: i32,
     show_trail: bool,
     show_bodies: bool,
-    G: f32,
+    g_constant: f32,
     pattern: i32,
     chosen_pattern: i32,
     camera: Camera2D,
@@ -42,7 +42,7 @@ impl State {
             sim_speed: 1,
             show_trail: true,
             show_bodies: true,
-            G: 10.,
+            g_constant: 10.,
             pattern: 2,
             chosen_pattern: 0,
             camera: Camera2D::new(app.window().width() as f32 / 2., app.window().height() as f32 / 2., app.window().width() as f32, app.window().height() as f32),
@@ -66,7 +66,7 @@ fn update(app: &mut App, state: &mut State) {
                 let temp_mover = state.planets.get_mut(i).unwrap().clone();
                 for j in 0..state.planets.len() {
                     if i != j {
-                        temp_mover.attract(state.planets.get_mut(j).unwrap(), state.G);
+                        temp_mover.attract(state.planets.get_mut(j).unwrap(), state.g_constant);
                     }
                 }
             }
@@ -179,6 +179,12 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
             ui.add_space(20.);
             ui.label(state.translations.get(&state.chosen_lang, "wasd"));
             ui.label(state.translations.get(&state.chosen_lang, "qe"));
+
+            ui.with_layout(Layout::bottom_up(Align::Center), |ui| {
+                ui.add_space(20.);
+                ui.hyperlink("https://github.com/mantasarm/n-body-sim");
+                ui.label(state.translations.get(&state.chosen_lang, "credits"));
+            });
         });
     });
     
