@@ -2,11 +2,13 @@ pub mod mover;
 pub mod vec_math;
 pub mod pattern_loader;
 pub mod camera;
+pub mod translations;
 
 use camera::Camera2D;
 use mover::Mover;
 use notan::{notan_main, AppState, prelude::{Graphics, App, WindowConfig, Color, RenderTexture, TextureFilter, Plugins, KeyCode}, draw::{DrawConfig, CreateDraw, DrawImages}, egui::{EguiConfig, Window, EguiPluginSugar, SidePanel, panel::Side, Slider, ComboBox}};
 use pattern_loader::load_selected_pattern;
+use translations::Translations;
 
 pub const TRAIL_TEX_WIDTH: i32 = 1920 * 6;
 pub const TRAIL_TEX_HEIGHT: i32 = 1080 * 6;
@@ -23,7 +25,9 @@ struct State {
     chosen_pattern: i32,
     camera: Camera2D,
     camera_zoom: f32,
-    paused: bool
+    paused: bool,
+    translations: Translations,
+    chosen_lang: String
 }
 
 impl State {
@@ -33,7 +37,6 @@ impl State {
         pattern_loader::load_selected_pattern(&mut planets, app, 0);
         
         Self {
-            //sun,
             planets,
             trail_texture: gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).with_filter(TextureFilter::Linear, TextureFilter::Linear).build().unwrap(),
             sim_speed: 1,
@@ -44,7 +47,9 @@ impl State {
             chosen_pattern: 0,
             camera: Camera2D::new(app.window().width() as f32 / 2., app.window().height() as f32 / 2., app.window().width() as f32, app.window().height() as f32),
             camera_zoom: 1.,
-            paused: false
+            paused: false,
+            translations: Translations::new(),
+            chosen_lang: "en".to_string()
         }
     }
 }
@@ -137,47 +142,43 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
     let output = plugins.egui(|ctx| {
         SidePanel::new(Side::Left, "left_panel").resizable(false).min_width(app.window().width() as f32 / 5.).show(ctx, |ui| {
             ui.vertical_centered(|ui| {
-                ui.heading("Parametrai");
+                ui.heading(state.translations.get(&state.chosen_lang, "settings"));
             });
             ui.separator();
 
-            ui.label("Pasirinkite raštą: ");
-            ComboBox::from_label("").selected_text(format!("raštas{}", state.chosen_pattern)).show_ui(ui, |ui| {
-                ui.selectable_value(&mut state.pattern, 0, "raštas0");
-                ui.selectable_value(&mut state.pattern, 1, "raštas1");
-                ui.selectable_value(&mut state.pattern, 2, "raštas2");
-                ui.selectable_value(&mut state.pattern, 3, "raštas3");
-                ui.selectable_value(&mut state.pattern, 4, "raštas4");
-                ui.selectable_value(&mut state.pattern, 5, "raštas5");
-                ui.selectable_value(&mut state.pattern, 6, "raštas6");
-                ui.selectable_value(&mut state.pattern, 7, "raštas7");
-                ui.selectable_value(&mut state.pattern, 8, "raštas8");
-                ui.selectable_value(&mut state.pattern, 9, "raštas9");
+            ui.label(state.translations.get(&state.chosen_lang, "chooselang"));
+            ComboBox::from_label("  ").selected_text(&state.chosen_lang).show_ui(ui, |ui| {
+               ui.selectable_value(&mut state.chosen_lang, "en".to_string(), "English");
+               ui.selectable_value(&mut state.chosen_lang, "lt".to_string(), "Lietuvių");
             });
             ui.add_space(20.);
 
-            let slider = Slider::new(&mut state.sim_speed, 1..=25).text("Simuliacijos greitis");
+            ui.label(state.translations.get(&state.chosen_lang, "choose"));
+            ComboBox::from_label(" ").selected_text(format!("{}{}", state.translations.get(&state.chosen_lang, "pattern"), state.chosen_pattern)).show_ui(ui, |ui| {
+                for i in 0..=9 {
+                    ui.selectable_value(&mut state.pattern, i, format!("{}{}", state.translations.get(&state.chosen_lang, "pattern"), i));
+                }
+            });
+            ui.add_space(20.);
+
+            let slider = Slider::new(&mut state.sim_speed, 1..=25).text(state.translations.get(&state.chosen_lang, "simspeed"));
             ui.add(slider);
             
-            if ui.checkbox(&mut state.show_trail, "Rodyti trajektoriją").clicked() {
+            if ui.checkbox(&mut state.show_trail, state.translations.get(&state.chosen_lang, "showtrail")).clicked() {
                 state.trail_texture = gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).build().unwrap();
             }
-            ui.checkbox(&mut state.show_bodies, "Rodyti kūnus");
+            ui.checkbox(&mut state.show_bodies, state.translations.get(&state.chosen_lang, "showbodies"));
 
-            ui.checkbox(&mut state.paused, "Sustabdyti");
+            ui.checkbox(&mut state.paused, state.translations.get(&state.chosen_lang, "pause"));
 
-            if ui.button("Paleisti iš naujo").clicked() {
+            if ui.button(state.translations.get(&state.chosen_lang, "restart")).clicked() {
                 load_selected_pattern(&mut state.planets, app, state.pattern);
                 state.trail_texture = gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).build().unwrap();
             }
 
             ui.add_space(20.);
-            ui.label("Naudokite W, A, S ir D klavišus judėjimui");
-            ui.label("Naudokite Q ir E klavišus atitraukti ir pritraukti vaizdą");
-
-            // for mover in &state.planets {
-            //     ui.label(format!("pos: {}, x_force: {}, y_force: {}", mover.pos, mover.vel.x, mover.vel.y));
-            // }
+            ui.label(state.translations.get(&state.chosen_lang, "wasd"));
+            ui.label(state.translations.get(&state.chosen_lang, "qe"));
         });
     });
     
