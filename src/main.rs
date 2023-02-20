@@ -12,8 +12,8 @@ use notan::{notan_main, AppState, prelude::{Graphics, App, WindowConfig, Color, 
 use pattern_loader::load_selected_pattern;
 use translations::Translations;
 
-pub const TRAIL_TEX_WIDTH: i32 = 1920 * 6;
-pub const TRAIL_TEX_HEIGHT: i32 = 1080 * 6;
+pub const TRAIL_TEX_WIDTH: i32 = 1920 * 3;
+pub const TRAIL_TEX_HEIGHT: i32 = 1080 * 3;
 
 #[derive(AppState)]
 struct State {
