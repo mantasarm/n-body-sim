@@ -8,12 +8,12 @@ use std::{ops::AddAssign, f32::consts::PI};
 
 use camera::Camera2D;
 use mover::Mover;
-use notan::{notan_main, AppState, prelude::{Graphics, App, WindowConfig, Color, RenderTexture, TextureFilter, Plugins, KeyCode}, draw::{DrawConfig, CreateDraw, DrawImages, DrawShapes}, egui::{EguiConfig, EguiPluginSugar, SidePanel, panel::Side, Slider, ComboBox, Layout, Align, Window, DragValue, Pos2}, math::Vec2};
+use notan::{notan_main, AppState, prelude::{Graphics, App, WindowConfig, Color, RenderTexture, TextureFilter, Plugins, KeyCode}, draw::{DrawConfig, CreateDraw, DrawImages, DrawShapes}, egui::{EguiConfig, EguiPluginSugar, SidePanel, panel::Side, Slider, ComboBox, Layout, Align, Window, DragValue, ScrollArea}, math::Vec2};
 use pattern_loader::load_selected_pattern;
 use translations::Translations;
 
-pub const TRAIL_TEX_WIDTH: i32 = 1920 * 3;
-pub const TRAIL_TEX_HEIGHT: i32 = 1080 * 3;
+pub const TRAIL_TEX_WIDTH: i32 = (3000. * 1.5) as i32;
+pub const TRAIL_TEX_HEIGHT: i32 = (3000. /  1.5) as i32;
 
 #[derive(AppState)]
 struct State {
@@ -50,7 +50,7 @@ impl State {
             show_trail: true,
             show_bodies: true,
             g_constant: 10.,
-            pattern: -1,
+            pattern: 6,
             chosen_pattern: 0,
             camera: Camera2D::new(app.window().width() as f32 / 2., app.window().height() as f32 / 2., app.window().width() as f32, app.window().height() as f32),
             camera_zoom: 1.,
@@ -142,7 +142,7 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
 
     state.camera.apply(&mut draw);
     if state.show_trail {
-        draw.image(&state.trail_texture.texture()).position(-TRAIL_TEX_WIDTH as f32 / 2., -TRAIL_TEX_HEIGHT as f32 / 2.);
+        draw.image(&state.trail_texture.texture()).position(-TRAIL_TEX_WIDTH as f32 / 4., 0.0);
     }
 
     if state.show_bodies {
@@ -179,7 +179,7 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
     }
 
     let output = plugins.egui(|ctx| {
-        SidePanel::new(Side::Left, "left_panel").resizable(false).min_width(app.window().width() as f32 / 5.).show(ctx, |ui| {
+        SidePanel::new(Side::Left, "left_panel").resizable(false).min_width(app.window().width() as f32 / 8.).show(ctx, |ui| {
             ui.vertical_centered(|ui| {
                 ui.heading(state.translations.get(&state.chosen_lang, "settings"));
             });
@@ -259,25 +259,27 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
             });
             Window::new(state.translations.get(&state.chosen_lang, "bodiesinsim")).resizable(false).show(ctx, |ui| {
                 if state.planets.len() > 0 {
-                    ui.separator();
-                    for i in 0..state.planets.len() {
-                        ui.label(format!("{} {}", state.translations.get(&state.chosen_lang, "obj"), i));
-                        let btn =  ui.button(state.translations.get(&state.chosen_lang, "remove"));
-                        if btn.clicked() {
-                            state.planets.remove(i);
-                            break;
-                        } else if btn.hovered() {
-                            state.planets.get_mut(i).unwrap().selected = true;
-                        } else {
-                            state.planets.get_mut(i).unwrap().selected = false;
+                    ScrollArea::vertical().show(ui, |ui| {
+                        ui.separator();
+                        for i in 0..state.planets.len() {
+                            ui.label(format!("{} {}", state.translations.get(&state.chosen_lang, "obj"), i));
+                            let btn =  ui.button(state.translations.get(&state.chosen_lang, "remove"));
+                            if btn.clicked() {
+                                state.planets.remove(i);
+                                break;
+                            } else if btn.hovered() {
+                                state.planets.get_mut(i).unwrap().selected = true;
+                            } else {
+                                state.planets.get_mut(i).unwrap().selected = false;
+                            }
+                            ui.label(format!("{} (x, y): ({}, {})", state.translations.get(&state.chosen_lang, "vel"), state.planets.get(i).unwrap().vel.x, state.planets.get(i).unwrap().vel.y));
+                            ui.label(format!("{} (x, y): ({}, {})", state.translations.get(&state.chosen_lang, "pos"), state.planets.get(i).unwrap().pos.x, state.planets.get(i).unwrap().pos.y));
+                            ui.label(format!("{}: {}", state.translations.get(&state.chosen_lang, "mass"), state.planets.get(i).unwrap().m));
+                            
+    
+                            ui.add_space(20.);
                         }
-                        ui.label(format!("{} (x, y): ({}, {})", state.translations.get(&state.chosen_lang, "vel"), state.planets.get(i).unwrap().vel.x, state.planets.get(i).unwrap().vel.y));
-                        ui.label(format!("{} (x, y): ({}, {})", state.translations.get(&state.chosen_lang, "pos"), state.planets.get(i).unwrap().pos.x, state.planets.get(i).unwrap().pos.y));
-                        ui.label(format!("{}: {}", state.translations.get(&state.chosen_lang, "mass"), state.planets.get(i).unwrap().m));
-                        
-
-                        ui.add_space(20.);
-                    }
+                    });
                 }
             });
         }

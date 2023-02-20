@@ -47,7 +47,7 @@ impl Mover {
     }
 
     pub fn render_trail(&self, draw: &mut Draw) {
-        draw.line((TRAIL_TEX_WIDTH as f32 / 2. + self.pos.x, TRAIL_TEX_HEIGHT as f32 / 2. + self.pos.y), (TRAIL_TEX_WIDTH as f32 / 2. + self.delta_pos.x, TRAIL_TEX_HEIGHT as f32 / 2. + self.delta_pos.y)).width(3.).color(self.trail_color);
+        draw.line((TRAIL_TEX_WIDTH as f32 / 4. + self.pos.x, 0.0 + self.pos.y), (TRAIL_TEX_WIDTH as f32 / 4. + self.delta_pos.x, 0. + self.delta_pos.y)).width(3.).color(self.trail_color);
     }
 
     pub fn render(&self, draw: &mut Draw) {
