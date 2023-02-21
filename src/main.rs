@@ -41,7 +41,7 @@ impl State {
     fn new(app: &mut App, gfx: &mut Graphics) -> Self {
         let mut planets = Vec::<Mover>::new();
 
-        pattern_loader::load_selected_pattern(&mut planets, app, 0);
+        pattern_loader::load_selected_pattern(&mut planets, app, 6);
         
         Self {
             planets,
@@ -166,7 +166,7 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
     
 
     if state.chosen_pattern != state.pattern {
-        state.trail_texture = gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).build().unwrap();
+        state.trail_texture = gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).with_filter(TextureFilter::Linear, TextureFilter::Linear).build().unwrap();
         state.chosen_pattern = state.pattern;
         state.camera.set_position(app.window().width() as f32 / 2., app.window().height() as f32 / 2.);
         state.camera.set_zoom(1.0);
@@ -210,7 +210,7 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
             ui.add(slider);
             
             if ui.checkbox(&mut state.show_trail, state.translations.get(&state.chosen_lang, "showtrail")).clicked() {
-                state.trail_texture = gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).build().unwrap();
+                state.trail_texture = gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).with_filter(TextureFilter::Linear, TextureFilter::Linear).build().unwrap();
             }
             ui.checkbox(&mut state.show_bodies, state.translations.get(&state.chosen_lang, "showbodies"));
 
@@ -220,7 +220,7 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
                 if state.chosen_pattern != -1 {
                     load_selected_pattern(&mut state.planets, app, state.pattern);
                 }
-                state.trail_texture = gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).build().unwrap();
+                state.trail_texture = gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).with_filter(TextureFilter::Linear, TextureFilter::Linear).build().unwrap();
             }
 
             ui.add_space(20.);
