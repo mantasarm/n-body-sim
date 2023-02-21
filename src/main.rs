@@ -12,8 +12,8 @@ use notan::{notan_main, AppState, prelude::{Graphics, App, WindowConfig, Color, 
 use pattern_loader::load_selected_pattern;
 use translations::Translations;
 
-pub const TRAIL_TEX_WIDTH: i32 = (3000. * 1.5) as i32;
-pub const TRAIL_TEX_HEIGHT: i32 = (3000. /  1.5) as i32;
+pub const TRAIL_TEX_WIDTH: i32 = (1920. * 4.) as i32;
+pub const TRAIL_TEX_HEIGHT: i32 = (1080. * 4.) as i32;
 
 #[derive(AppState)]
 struct State {
@@ -133,7 +133,7 @@ fn camera_control(app: &mut App, camera: &mut Camera2D, camera_zoom: &mut f32) {
 fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut State) {
     let mut trail_draw = state.trail_texture.create_draw();
     for planet in &state.planets {
-        planet.render_trail(&mut trail_draw);
+         planet.render_trail(&mut trail_draw);
     }
     gfx.render_to(&state.trail_texture, &trail_draw);
 
@@ -147,7 +147,7 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
 
     if state.show_bodies {
         for planet in &state.planets {
-            planet.render(&mut draw);
+            planet.render(&mut draw);                  // MEMORY PROBLEM HERE
         }
     }
 
@@ -302,7 +302,7 @@ fn map(value: &f32, begin: f32, end: f32, new_begin: f32, new_end: f32) -> f32 {
 #[notan_main]
 fn main() -> Result<(), String> {
     notan::init_with(State::new)
-        .add_config(WindowConfig::new().vsync(true).title("Gravitacija").multisampling(8).resizable(true).maximized(true))
+        .add_config(WindowConfig::new().vsync(true).title("Gravitacija").multisampling(0).resizable(true).maximized(true))
         .add_config(DrawConfig)
         .add_config(EguiConfig)
         .update(update)
