@@ -166,7 +166,7 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
     
 
     if state.chosen_pattern != state.pattern {
-        state.trail_texture = gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).with_filter(TextureFilter::Linear, TextureFilter::Linear).build().unwrap();
+        clear_trail_texture(&mut state.trail_texture, gfx);
         state.chosen_pattern = state.pattern;
         state.camera.set_position(app.window().width() as f32 / 2., app.window().height() as f32 / 2.);
         state.camera.set_zoom(1.0);
@@ -210,7 +210,7 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
             ui.add(slider);
             
             if ui.checkbox(&mut state.show_trail, state.translations.get(&state.chosen_lang, "showtrail")).clicked() {
-                state.trail_texture = gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).with_filter(TextureFilter::Linear, TextureFilter::Linear).build().unwrap();
+                clear_trail_texture(&mut state.trail_texture, gfx);
             }
             ui.checkbox(&mut state.show_bodies, state.translations.get(&state.chosen_lang, "showbodies"));
 
@@ -220,7 +220,7 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
                 if state.chosen_pattern != -1 {
                     load_selected_pattern(&mut state.planets, app, state.pattern);
                 }
-                state.trail_texture = gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).with_filter(TextureFilter::Linear, TextureFilter::Linear).build().unwrap();
+                clear_trail_texture(&mut state.trail_texture, gfx);
             }
 
             ui.add_space(20.);
@@ -252,7 +252,7 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
 
                 if ui.button(state.translations.get(&state.chosen_lang, "clear")).clicked() {
                     state.planets.clear();
-                    state.trail_texture = gfx.create_render_texture(TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT).build().unwrap();
+                    clear_trail_texture(&mut state.trail_texture, gfx);
                 }
 
                 ui.label(state.translations.get(&state.chosen_lang, "rclick"));
@@ -288,6 +288,12 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
     gfx.render(&output);
 }
 
+fn clear_trail_texture(trail_tex: &mut RenderTexture, gfx: &mut Graphics) {
+    let mut draw = trail_tex.create_draw();
+    draw.clear(Color::from_hex(0x252526FF));
+    gfx.render_to(&trail_tex, &draw);
+}
+
 fn get_mouse_in_world(mouse_pos: &(f32, f32), window_size: (i32, i32), camera: &Camera2D) -> (f32, f32) {
     let mouse_x = map(&mouse_pos.0, 0.0, window_size.0 as f32, 0.0, camera.work_size.x / camera.scale().x);
     let mouse_y = map(&mouse_pos.1, 0.0, window_size.1 as f32, 0.0, camera.work_size.y / camera.scale().y);
@@ -302,7 +308,7 @@ fn map(value: &f32, begin: f32, end: f32, new_begin: f32, new_end: f32) -> f32 {
 #[notan_main]
 fn main() -> Result<(), String> {
     notan::init_with(State::new)
-        .add_config(WindowConfig::new().vsync(true).title("Gravitacija").multisampling(0).resizable(true).maximized(true))
+        .add_config(WindowConfig::new().vsync(true).title("Gravitacija").multisampling(4).resizable(true).maximized(true))
         .add_config(DrawConfig)
         .add_config(EguiConfig)
         .update(update)
