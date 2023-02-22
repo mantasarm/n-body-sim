@@ -2,7 +2,7 @@ use std::ops::AddAssign;
 
 use notan::{math::Vec2, draw::{Draw, DrawShapes}, prelude::{Color, App}, random::rand::random};
 
-use crate::{vec_math, TRAIL_TEX_WIDTH, TRAIL_TEX_HEIGHT};
+use crate::{vec_math, TRAIL_TEX_WIDTH};
 
 #[derive(Clone, Copy)]
 pub struct Mover {
