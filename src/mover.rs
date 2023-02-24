@@ -2,7 +2,7 @@ use std::ops::AddAssign;
 
 use notan::{math::Vec2, draw::{Draw, DrawShapes}, prelude::{Color, App}, random::rand::random};
 
-use crate::{vec_math, TRAIL_TEX_WIDTH};
+use crate::{vec_math, TRAIL_TEX_WIDTH, G, TRAIL_TEX_HEIGHT};
 
 #[derive(Clone, Copy)]
 pub struct Mover {
@@ -47,7 +47,7 @@ impl Mover {
     }
 
     pub fn render_trail(&self, draw: &mut Draw) {
-        draw.line(((TRAIL_TEX_WIDTH as f32 / 4. + self.pos.x), (0.0 + self.pos.y)), ((TRAIL_TEX_WIDTH as f32 / 4. + self.delta_pos.x), (0. + self.delta_pos.y))).width(2.).color(self.trail_color);
+        draw.line(((TRAIL_TEX_WIDTH as f32 / 2. + self.pos.x), (TRAIL_TEX_HEIGHT as f32 / 2. + self.pos.y)), ((TRAIL_TEX_WIDTH as f32 / 2. + self.delta_pos.x), (TRAIL_TEX_HEIGHT as f32 / 2. + self.delta_pos.y))).width(2.).color(self.trail_color);
     }
 
     pub fn render(&self, draw: &mut Draw) {
@@ -69,12 +69,12 @@ impl Mover {
         self
     }
 
-    pub fn attract(&self, mover: &mut Mover, g_constant: f32) {
+    pub fn attract(&self, mover: &mut Mover) {
         if mover.apply_forces {
             let mut force = self.pos.clone() - mover.pos.clone();
             let distance_sq = vec_math::mag_sq(&force).clamp(25., 2500.);
 
-            let strength = g_constant * (self.m * mover.m) / distance_sq;
+            let strength = G * (self.m * mover.m) / distance_sq;
 
             vec_math::set_mag(&mut force, strength);
             mover.apply_force(&force);
