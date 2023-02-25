@@ -69,6 +69,13 @@ impl Mover {
         self
     }
 
+    pub fn set_vel(mut self, x: f32, y: f32) -> Self {
+        self.vel.x = x;
+        self.vel.y = y;
+
+        self
+    }
+
     pub fn attract(&self, mover: &mut Mover) {
         if mover.apply_forces {
             let mut force = self.pos.clone() - mover.pos.clone();

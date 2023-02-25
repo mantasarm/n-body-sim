@@ -1,104 +1,108 @@
-use notan::math::Vec2;
+use crate::{mover::Mover, camera::Camera2D};
 
-use crate::mover::Mover;
+pub struct Pattern {
+    pub bodies: Vec<Mover>,
+}
 
-pub fn load_selected_pattern(planets: &mut Vec<Mover>, pattern: i32) {
-    match pattern {
-        0 => load_pattern0(planets),
-        1 => load_pattern1(planets),
-        2 => load_pattern2(planets),
-        3 => load_pattern3(planets),
-        4 => load_pattern4(planets),
-        5 => load_pattern5(planets),
-        6 => load_pattern6(planets),
-        7 => load_pattern7(planets),
-        8 => load_pattern8(planets),
-        9 => load_pattern9(planets),
-        _ => ()
+impl Pattern {
+    pub fn new() -> Self {
+        Self {
+            bodies: Vec::<Mover>::new()
+        }
     }
+
+    pub fn add_body(mut self, mover: Mover) -> Self {
+        self.bodies.push(mover);
+
+        self
+    } 
 }
 
-pub fn load_pattern0(planets: &mut Vec<Mover>) {
-    planets.clear();
-    let center = Vec2::new(0.0, 0.0);
-
-    planets.push(Mover::new(center.x, center.y, 30., 0., 0.).apply_forces(false));
-
-    planets.push(Mover::new(center.x - 700., center.y - 100., 0.0001, -1.8, 10.));
+pub struct PatternLoader {
+    pub patterns: Vec<Pattern>,
+    pub pattern: usize,
+    pub chosen_pattern: usize,
 }
 
+impl PatternLoader {
+    pub fn new() -> Self {
+        let mut patterns = Vec::<Pattern>::new();
 
-pub fn load_pattern1(planets: &mut Vec<Mover>) {
-    planets.clear();
+        // Pattern 0
+        patterns.push(Pattern::new());
 
-    planets.push(Mover::new(0.0, 0.0, 5., 0., 0.).apply_forces(false));
+        // Pattern 1
+        patterns.push(Pattern::new()
+                        .add_body(Mover::new(0.0, 0.0, 5., 0., 0.).apply_forces(false))
+                        .add_body(Mover::new(0.0 + 100., 0.0 - 100., 3., 2., 2.)));
 
-    planets.push(Mover::new(0.0 + 100., 0.0 - 100., 3., 0., 2.));
-}
+        // Pattern 2
+        patterns.push(Pattern::new()
+                        .add_body(Mover::new(0.0 + 0., 0.0 - 150., 3., 1.35, 0.0))
+                        .add_body(Mover::new(0.0 + 0., 0.0 + 150., 3., -1.35, 0.0)));
 
-pub fn load_pattern2(planets: &mut Vec<Mover>) {
-    planets.clear();
+        // Pattern 3
+        patterns.push(Pattern::new()
+                        .add_body(Mover::new(0.0 + 0., 0.0 - 150., 3., 0.5, 0.0))
+                        .add_body(Mover::new(0.0 + 0., 0.0 + 150., 3., -0.5, 0.0)));
 
-    planets.push(Mover::new(0.0, 0.0, 5., 0., 0.).apply_forces(false));
+        // Pattern 4
+        patterns.push(Pattern::new()
+                        .add_body(Mover::new(0.0 + 200., 0.0 - 0., 3., 0., 2.))
+                        .add_body(Mover::new(0.0 - 200., 0.0 - 0., 3., 0., -2.))
+                        .add_body(Mover::new(0.0 - 0., 0.0 - 200., 3., 2., 0.))
+                        .add_body(Mover::new(0.0 - 0., 0.0 + 200., 3., -2., 0.)));
 
-    planets.push(Mover::new(0.0 + 100., 0.0 - 100., 3., 2., 2.));
-}
+        // Pattern 5
+        patterns.push(Pattern::new()
+                        .add_body(Mover::new(0.0, 0.0, 5., 0., 0.).apply_forces(false))
+                        .add_body(Mover::new(0.0 + 400., 0.0 + 0., 1., 0., 0.4)));
 
-pub fn load_pattern3(planets: &mut Vec<Mover>) {
-    planets.clear();
+        // Pattern 6
+        patterns.push(Pattern::new()
+                        .add_body(Mover::new(0.0 + 0., 0.0 - 150., 3., 2., 0.0))
+                        .add_body(Mover::new(0.0 + 0., 0.0 + 150., 3., -2., 0.0)));
 
-    planets.push(Mover::new(0.0, 0.0, 5., 0., 0.).apply_forces(false));
 
-    planets.push(Mover::new(0.0 + 100., 0.0 + 300., 3., 0.365, 0.));
-}
+        Self {
+            patterns,
+            pattern: 1,
+            chosen_pattern: 1,
+        }
+    }
 
-pub fn load_pattern4(planets: &mut Vec<Mover>) {
-    planets.clear();
+    pub fn handle_pattern_changes(&mut self, camera: &mut Camera2D, camera_zoom: &mut f32, editor_enabled: &mut bool) -> bool {
+        if self.chosen_pattern != self.pattern {
+            self.chosen_pattern = self.pattern;
+            camera.set_position(0., 0.);
+            camera.set_zoom(1.0);
+            *camera_zoom = 1.0;
+            
+            if self.chosen_pattern != 0 {
+                *editor_enabled = false;
+            } else {
+                *editor_enabled = true;
+            }
+            return true;
+        }
+        false
+    }
 
-    planets.push(Mover::new(0.0, 0.0, 5., 0., 0.).apply_forces(false));
+    pub fn load_pattern(&self, planets: &mut Vec<Mover>, index: usize) {
+        planets.clear();
 
-    planets.push(Mover::new(0.0 + 400., 0.0 + 0., 1., 0., 0.4));
-}
+        for mover in &self.patterns.get(index).unwrap().bodies {
+            planets.push(mover.to_owned());
+        }
 
-pub fn load_pattern5(planets: &mut Vec<Mover>) {
-    planets.clear();
+    }
 
-    planets.push(Mover::new(0.0 + 0., 0.0 - 150., 3., 2., 0.0));
+    pub fn reload_pattern(&self, planets: &mut Vec<Mover>) {
+        planets.clear();
 
-    planets.push(Mover::new(0.0 + 0., 0.0 + 150., 3., -2., 0.0));
-}
+        for mover in &self.patterns.get(self.chosen_pattern).unwrap().bodies {
+            planets.push(mover.to_owned());
+        }
 
-pub fn load_pattern6(planets: &mut Vec<Mover>) {
-    planets.clear();
-
-    planets.push(Mover::new(0.0 + 0., 0.0 - 150., 3., 0.5, 0.0));
-
-    planets.push(Mover::new(0.0 + 0., 0.0 + 150., 3., -0.5, 0.0));
-}
-
-pub fn load_pattern7(planets: &mut Vec<Mover>) {
-    planets.clear();
-
-    planets.push(Mover::new(0.0 + 0., 0.0 - 150., 3., 1.35, 0.0));
-
-    planets.push(Mover::new(0.0 + 0., 0.0 + 150., 3., -1.35, 0.0));
-}
-
-pub fn load_pattern8(planets: &mut Vec<Mover>) {
-    planets.clear();
-
-    planets.push(Mover::new(0.0 + 150., 0.0 + 150., 3., 4., 0.0));
-
-    planets.push(Mover::new(0.0 - 150., 0.0 + 150., 3., 2., 0.0));
-
-    planets.push(Mover::new(0.0, 0.0 - 150., 3., -1., 0.));
-}
-
-pub fn load_pattern9(planets: &mut Vec<Mover>) {
-    planets.clear();
-
-    planets.push(Mover::new(0.0 + 200., 0.0 - 0., 3., 0., 2.));
-    planets.push(Mover::new(0.0 - 200., 0.0 - 0., 3., 0., -2.));
-    planets.push(Mover::new(0.0 - 0., 0.0 - 200., 3., 2., 0.));
-    planets.push(Mover::new(0.0 - 0., 0.0 + 200., 3., -2., 0.));
+    }
 }

@@ -36,6 +36,8 @@ impl Translations {
         translations.insert("ltmass".to_string(), "Masė".to_string());
         translations.insert("ltrclick".to_string(), "Paspauskite pelės kairį klavišą lauke, kad pridėti kūnus".to_string());
         translations.insert("lteditor".to_string(), "Redaktorius".to_string());
+        translations.insert("lttrack".to_string(), "Sekti".to_string());
+        translations.insert("ltuntrack".to_string(), "Nustoti sekima".to_string());
 
 
         translations.insert("ensettings".to_string(), "Settings".to_string());
@@ -65,7 +67,8 @@ impl Translations {
         translations.insert("enmass".to_string(), "Mass".to_string());
         translations.insert("enrclick".to_string(), "Right click in the field to add bodies".to_string());
         translations.insert("eneditor".to_string(), "Editor".to_string());
-
+        translations.insert("entrack".to_string(), "Track".to_string());
+        translations.insert("enuntrack".to_string(), "Stop tracking".to_string());
 
         Self {
             translations,
