@@ -60,7 +60,7 @@ impl State {
                 sim_speed: 1,
                 show_trail: true,
                 show_bodies: true,
-                paused: true,
+                paused: false,
                 editor_enabled: false
             },
             pattern_loader,

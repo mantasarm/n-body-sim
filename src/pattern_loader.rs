@@ -72,8 +72,8 @@ impl PatternLoader {
 
         Self {
             patterns,
-            pattern: 7,
-            chosen_pattern: 7,
+            pattern: 1,
+            chosen_pattern: 1,
         }
     }
 
