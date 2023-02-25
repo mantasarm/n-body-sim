@@ -63,11 +63,17 @@ impl PatternLoader {
                         .add_body(Mover::new(0.0 + 0., 0.0 - 150., 3., 2., 0.0))
                         .add_body(Mover::new(0.0 + 0., 0.0 + 150., 3., -2., 0.0)));
 
+        // Pattern 7
+        patterns.push(Pattern::new()
+                        .add_body(Mover::new(0.0, 0.0, 10., 0., 0.).apply_forces(false))
+                        .add_body(Mover::new(-2050., 0., 1., 0., 9.))
+                        .add_body(Mover::new(-2090., 0., 0.41, 1.0, 9.7)));
+
 
         Self {
             patterns,
-            pattern: 1,
-            chosen_pattern: 1,
+            pattern: 7,
+            chosen_pattern: 7,
         }
     }
 
