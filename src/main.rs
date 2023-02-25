@@ -51,7 +51,7 @@ impl State {
         let mut planets = Vec::<Mover>::new();
 
         let pattern_loader = PatternLoader::new();
-        pattern_loader.load_pattern(&mut planets, 7);
+        pattern_loader.load_pattern(&mut planets, 1);
         
         Self {
             planets,
