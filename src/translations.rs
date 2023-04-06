@@ -11,8 +11,8 @@ impl Translations {
 
         translations.insert("ltsettings".to_string(), "Parametrai".to_string());
         translations.insert("ltchooselang".to_string(), "Pasirinkite kalbą: ".to_string());
-        translations.insert("ltpattern".to_string(), "raštas".to_string());
-        translations.insert("ltchoose".to_string(), "Pasirinkite raštą: ".to_string());
+        translations.insert("ltpattern".to_string(), "išdėstymas".to_string());
+        translations.insert("ltchoose".to_string(), "Pasirinkite pradinį išsidėstymą: ".to_string());
         translations.insert("ltsimspeed".to_string(), "Simuliacijos greitis".to_string());
         translations.insert("ltshowtrail".to_string(), "Rodyti trajektoriją".to_string());
         translations.insert("ltshowbodies".to_string(), "Rodyti kūnus".to_string());
@@ -20,11 +20,11 @@ impl Translations {
         translations.insert("ltrestart".to_string(), "Paleisti iš naujo".to_string());
         translations.insert("ltwasd".to_string(), "Naudokite W, A, S ir D klavišus judėjimui".to_string());
         translations.insert("ltqe".to_string(), "Naudokite Q ir E klavišus pritraukti ir atitraukti vaizdą".to_string());
-        translations.insert("ltcredits".to_string(), "Darba atiliko Mantas Armalys".to_string());
+        translations.insert("ltcredits".to_string(), "Darbą atiliko Mantas Armalys".to_string());
         translations.insert("ltcreate".to_string(), "Kurti savo".to_string());
         translations.insert("ltaddbodies".to_string(), "Pridėti kūnus".to_string());
         translations.insert("ltbodymass".to_string(), "Kūno masė: ".to_string());
-        translations.insert("ltmoveable".to_string(), "Veikiamas jėgų".to_string());
+        translations.insert("ltmoveable".to_string(), "Veikiamas gravitacijos".to_string());
         translations.insert("ltdir".to_string(), "Kryptis: ".to_string());
         translations.insert("ltinitf".to_string(), "Pradinė kūno jėga: ".to_string());
         translations.insert("ltclear".to_string(), "Išvalyti".to_string());
@@ -35,7 +35,7 @@ impl Translations {
         translations.insert("ltpos".to_string(), "Pozicija".to_string());
         translations.insert("ltmass".to_string(), "Masė".to_string());
         translations.insert("ltrclick".to_string(), "Paspauskite pelės kairį klavišą lauke, kad pridėti kūnus".to_string());
-        translations.insert("lteditor".to_string(), "Redaktorius".to_string());
+        translations.insert("lteditor".to_string(), "Redagavimas".to_string());
         translations.insert("lttrack".to_string(), "Sekti".to_string());
         translations.insert("ltuntrack".to_string(), "Nustoti sekima".to_string());
 

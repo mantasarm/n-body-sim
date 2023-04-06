@@ -202,6 +202,10 @@ fn draw(app: &mut App, gfx: &mut Graphics, plugins: &mut Plugins, state: &mut St
             ui.checkbox(&mut state.editor_info.editor_enabled, state.trans.get("editor"));
 
             if ui.button(state.trans.get("restart")).clicked() {
+                state.object_tracking = None;
+                state.camera.set_position(0., 0.);
+                state.camera.set_zoom(1.0);
+                state.camera_zoom = 1.;
                 state.pattern_loader.reload_pattern(&mut state.planets);
                 clear_trail_texture(&mut state.trail_texture, gfx);
             }
