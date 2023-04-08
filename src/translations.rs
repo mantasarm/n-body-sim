@@ -34,7 +34,7 @@ impl Translations {
         translations.insert("ltvel".to_string(), "Greitis".to_string());
         translations.insert("ltpos".to_string(), "Pozicija".to_string());
         translations.insert("ltmass".to_string(), "Masė".to_string());
-        translations.insert("ltrclick".to_string(), "Paspauskite pelės kairį klavišą lauke, kad pridėti kūnus".to_string());
+        translations.insert("ltrclick".to_string(), "Paspauskite pelės dešinį klavišą lauke, kad pridėti kūnus".to_string());
         translations.insert("lteditor".to_string(), "Redagavimas".to_string());
         translations.insert("lttrack".to_string(), "Sekti".to_string());
         translations.insert("ltuntrack".to_string(), "Nustoti sekima".to_string());
